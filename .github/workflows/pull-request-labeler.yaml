@@ -1,0 +1,37 @@
+name: Pull Request Labeling
+
+
+on:
+  - pull_request
+
+
+permissions:
+  contents: read
+  pull-requests: write
+
+
+jobs:
+  label-pull-request:
+    runs-on: ubuntu-latest
+    name: Label pull request
+
+    steps:
+      - name: Apply section label to pull request
+        uses: actions/labeler@v5
+        with:
+          configuration-path: .github/labeler.yaml
+
+      - name: Apply size label to pull request
+        uses: pascalgn/size-label-action@v0.5.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          sizes: >
+            {
+              "0": "XS",
+              "10": "S",
+              "30": "M",
+              "100": "L",
+              "500": "XL",
+              "1000": "XXL"
+            }

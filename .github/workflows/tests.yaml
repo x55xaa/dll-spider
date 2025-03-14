@@ -1,0 +1,31 @@
+name: Tests
+
+
+on:
+  push:
+    paths:
+      - 'src'
+  pull_request:
+    paths:
+      - 'src'
+
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    name: Run unit tests
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        build_mode: [release]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build binaries in ${{ matrix.build_mode }} mode
+        run: cargo build --profile ${{ matrix.build_mode }}
+
+      - name: Test with cargo
+        run: cargo test --profile ${{ matrix.build_mode }}

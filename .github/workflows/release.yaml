@@ -1,0 +1,77 @@
+name: Release
+
+
+on:
+  push:
+    tags:
+    - 'v[0-9]+.[0-9]+.[0-9]+'
+
+
+permissions:
+  contents: write
+
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    name: Create release
+
+    steps:
+      - name: Set environment variables
+        run: |
+          echo "CHANGELOG=CHANGELOG.md" >> $GITHUB_ENV
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        uses: tj-actions/git-cliff@v1
+        with:
+          args: --verbose
+          output: ${{ env.CHANGELOG }}
+          template-config: .github/cliff_template.toml
+
+      - name: Commit changelog
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: ${{ env.CHANGELOG }}
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com
+          message: Update ${{ env.CHANGELOG }}
+          push: origin HEAD:main v${{ env.VERSION }} --force
+          tag: v${{ env.VERSION }} -fam "version ${{ env.VERSION }}"
+
+      - name: Create GitHub release
+        uses: docker://antonyurchenko/git-release:latest
+
+  upload-assets:
+    needs: create-release
+    runs-on: ${{ matrix.os }}
+    name: Upload assets
+
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: x86_64-apple-darwin
+            os: macos-latest
+          - target: x86_64-pc-windows-gnu
+            os: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload binaries
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: dll-spider
+          target: ${{ matrix.target }}
+          tar: unix
+          zip: windows
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,31 @@
+ci/cd:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ./.github/**/*
+
+config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ./.gitattributes
+      - ./.gitignore
+      - ./Cargo.toml
+      - ./Cargo.lock
+      - ./requirements.txt
+      - ./tox.ini
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ./*.md
+      - ./docs/**/*
+
+license:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ./LICENSE
+
+source:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ./setup.py
+      - ./src/**/*

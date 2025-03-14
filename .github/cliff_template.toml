@@ -1,0 +1,71 @@
+[bump]
+features_always_bump_minor = false
+breaking_always_bump_major = false
+
+[changelog]
+header = """
+
+# Changelog
+
+
+"""
+body = """
+
+{% if version %}\
+	## [{{ version | trim_start_matches(pat="v") }}]\
+    {% if previous.version %}\
+        (REPOSITORY_URL/compare/{{ previous.version }}...{{ version }})\
+    {% else %}\
+        (REPOSITORY_URL/releases/tag/{{ version }})\
+    {% endif %}\
+	{% raw %} {% endraw %}- {{ timestamp | date(format="%Y-%m-%d") }}\n\
+{% if not previous.version %}\
+    \n_🌱 Initial release._\n\
+{% endif %}\
+{% else %}\
+	## [unreleased]\n\
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}\n\
+	### {{ group | upper_first }}\n\
+	{% for commit in commits %}\n\
+		- \
+		{% if commit.breaking %}\
+		    **Breaking**: {{ commit.message}}\
+		{% else %}\
+		    {{ commit.message | upper_first }}\
+        {% endif %}\
+        {% if commit.breaking %}\
+            {% for footer in commit.footers | filter(attribute="token", value="BREAKING CHANGE") %}\
+                {% raw %}. {% endraw %}{{ footer.value }}\
+            {% endfor %}\
+        {% endif %}\
+        {% raw %} {% endraw %}([{{ commit.id | truncate(length=7, end="") }}](REPOSITORY_URL/commit/{{ commit.id }})) - ({{ commit.author.name }})\
+	{% endfor %}\n\
+{% endfor %}\n
+"""
+trim = true
+
+[git]
+commit_parsers = [
+    { message = '^fix', group = "Fixed"},
+    { message = '^(build|feat|perf): ((F|f)ix|(P|p)atch|(R|r)esolve)', group = "Fixed"},
+    { message = '^(build|feat|perf): ((A|a)dd|(A|a)ppend|(E|e)xpand|(I|i)nsert|(I|i)ntroduce)', group = "Added"},
+    { message = '^(build|feat|perf): ((D|d)rop|(R|r)emove)', group = "Removed"},
+    { message = '^(build|feat|perf)', group = "Changed"},
+    { message = '.*', skip = true },
+]
+commit_preprocessors = [
+    # replace multiple spaces with a single space.
+    { pattern = ' +', replace = " "},
+
+    # link issue references.
+    { pattern = '#(\d+)', replace = "[#${1}](REPOSITORY_URL/issues/${1})"},
+]
+conventional_commits = true
+filter_commits = false
+filter_unconventional = true
+protect_breaking_commits = false
+sort_commits = "oldest"
+split_commits = false
+tag_pattern = "v[0-9]+.[0-9]+.[0-9]+"
+topo_order = false

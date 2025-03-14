@@ -1,0 +1,16 @@
+[package]
+name = "package-name"
+version = "0.1.0"
+edition = "2021"
+description = "Description."
+readme = "README.md"
+license = "GNU General Public License v3.0 only"
+# license-file = "LICENSE"
+keywords = []
+authors = ["Stefano Cuizza <stefano.cuizza@protonmail.com>"]
+categories = []
+repository = "https://github.com/x55xaa/package-name"
+publish = false
+
+[dependencies]
+
