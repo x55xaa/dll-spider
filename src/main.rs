@@ -20,7 +20,7 @@ mod winapi;
 #[command(version, about, long_about = None)]
 #[command(propagate_version = true)]
 struct Cli {
-    /// set the verbosity level. option is additive, and can be used up to 5 times (trace/debug/info/warn/error). (default: info)
+    /// Set the verbosity level. option is additive, and can be used up to 5 times (trace/debug/info/warn/error). (default: info)
     #[arg(short, long, action = clap::ArgAction::Count, value_parser = clap::value_parser!(u8).range(0..=5))]
     #[clap(global = true)]
     verbose: u8,
@@ -33,7 +33,7 @@ struct Cli {
 #[derive(Args)]
 #[group(required = true, multiple = false)]
 struct Process {
-    /// name of the target process.
+    /// Name of the target process.
     #[arg(short, long = "by-name")]
     name: Option<String>,
 
@@ -45,17 +45,17 @@ struct Process {
 #[derive(Debug)]
 #[derive(Subcommand)]
 enum Commands {
-    /// load a DLL inside a target process.
+    /// Load a DLL inside a target process.
     Load {
         #[command(flatten)]
         process: Process,
 
-        /// path to the DLL to load.
+        /// Path to the DLL to load.
         #[arg(value_parser = |path: &str| dunce::canonicalize(path))]
         module: PathBuf,
     },
 
-    /// enumearate target processes.
+    /// Enumearate target processes.
     Enum {},
 }
 
