@@ -42,7 +42,7 @@ You can enumerate target processes with the following command:
  $ ./dll-spider enum
 ```
 
-This will return a list of process names along with their respective PIDs.
+This will return a list of process PIDs alongside their respective names.
 
 
 ### Inject a DLL
@@ -55,7 +55,7 @@ $ dll-spider load target.dll -p 1234
 
 > [!NOTE]
 > 
-> The target process can be identified either by its PID (with the `-p` otion) or its name (with the `-n` option).
+> The target process can be identified either by its PID (with the `-p` option) or its name (with the `-n` option).
 
 
 ## Documentation
