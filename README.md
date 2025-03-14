@@ -21,13 +21,13 @@ $ cargo build --release
 > [!IMPORTANT]
 > If you are not on Windows, you need to change the build target. To do so, first add the desired [target architecture](https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-1-with-host-tools) with `rustup`:
 >
-> ```console
+> ```bash
 > $ rustup target add x86_64-pc-windows-gnu
 > ```
 > 
 > And then build the crate:
 >
-> ```console
+> ```bash
 > $ cargo build --target x86_64-pc-windows-gnu --release
 > ```
 
@@ -38,8 +38,8 @@ $ cargo build --release
 
 You can enumerate target processes with the following command:
 
-```console
- $ ./dll-spider enum
+```bash
+ $ dll-spider enum
 ```
 
 This will return a list of process PIDs alongside their respective names.
@@ -49,7 +49,7 @@ This will return a list of process PIDs alongside their respective names.
 
 To load a DLL inside a process run:
 
-```console
+```bash
 $ dll-spider load target.dll -p 1234
 ```
 
