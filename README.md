@@ -31,6 +31,10 @@ $ cargo build --release
 > $ cargo build --target x86_64-pc-windows-gnu --release
 > ```
 
+### Release binaries
+
+Alternatively, you can get pre-compiled binaries of every release [here](https://github.com/x55xaa/dll-spider/releases).
+
 
 ## Usage
 
