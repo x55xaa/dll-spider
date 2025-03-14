@@ -10,7 +10,7 @@ use std::ptr;
 use std::thread;
 use std::time::Duration;
 
-use log::{debug, info};
+use log::{debug, info, warn};
 
 use windows::core::{
     Error,
@@ -167,6 +167,7 @@ pub fn find_process_by_name(name: &str, case_insensitive: Option<bool>) -> Resul
             return Ok(*value);
         }
         if case_insensitive && name.to_uppercase() == key.to_uppercase() {
+            warn!("{}", format!("partial match found {} <- {}", key, name));
             return Ok(*value);
         }
     }
