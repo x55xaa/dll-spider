@@ -19,10 +19,14 @@ jobs:
       matrix:
         os: [windows-latest]
         build_mode: [release]
+        toolchain: [stable]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Set toolchain
+        run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
 
       - name: Build binaries in ${{ matrix.build_mode }} mode
         run: cargo build --profile ${{ matrix.build_mode }}
